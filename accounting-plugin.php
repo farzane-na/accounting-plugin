@@ -30,7 +30,6 @@ function init_custom_elementor_widgets() {
 function register_custom_widget_elementor( $widgets_manager ) {
     $widgets_manager->register( new \Filtering_Card_Widget() );
 }
-
 function filtering_card_enqueue_assets() {
 
     wp_register_style(
@@ -39,8 +38,6 @@ function filtering_card_enqueue_assets() {
         [],
         '1.0.0'
     );
-
-
     wp_register_script(
         'filtering-card-script',
         plugin_dir_url(__FILE__) . 'assets/script/app.js',
