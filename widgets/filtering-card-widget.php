@@ -35,7 +35,7 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
         return $options;
     }
 
-    public function register_controls() {
+    protected function register_controls() {
         $this->start_controls_section(
             'filtering_card_post_type',
             [
@@ -52,11 +52,12 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                 'default' => 'post',
             ]
         );
-        $this->add_controls_section(
+        $this->end_controls_section();
+        $this->start_controls_section(
             'card-style',
             [
                 'label'=>esc_html__('Card Style','accounting'),
-                'tab'=> \Elementor|Controls_Manager::TAB_STYLE,
+                'tab'=> \Elementor\Controls_Manager::TAB_STYLE,
             ]
         );
         $this->add_group_control(Group_Control_Typography::get_type(), [
@@ -64,5 +65,151 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
             'label' => __('Typography', 'accounting'),
             'selector' => '{{WRAPPER}} .filtering-card--typography',
         ]);
+        $this->end_controls_section();
     }
+    public function render() {
+        $search = isset($_POST['search']) ? sanitize_text_field($_POST['search']) : '';
+        $settings = $this->get_settings_for_display();
+        $selected_cats = isset($_POST['categories']) ? array_map('intval', $_POST['categories']) : [];
+
+        // درست گرفتن post_type از تنظیمات (fix)
+        $post_type = ! empty( $settings['select_post_type'] ) ? $settings['select_post_type'] : 'education-video';
+
+        // گرفتن دسته‌بندی‌ها (اگر taxonomy متفاوتی داری اینجا تغییر بده)
+        $categories = get_terms([
+            'taxonomy'   => 'video-category',
+            'hide_empty' => true,
+        ]);
+
+        // کوئری ویدیوها — وضع پیشنهادی: فقط منتشر شده‌ها
+        $args = [
+            'post_type'      => $post_type,
+            'posts_per_page' => -1,
+            'post_status'    => 'publish',
+            's'              => $search,
+        ];
+        if ( !empty($selected_cats) ) {
+            $args['tax_query'] = [
+                [
+                    'taxonomy' => 'video-category',
+                    'field'    => 'term_id',
+                    'terms'    => $selected_cats,
+                ]
+            ];
+        }
+        $query = new WP_Query($args);
+        ?>
+
+        <div class="filtering-card">
+            <!-- مودال ویدیو -->
+            <div class="filtering-card__modal-video" style="display:none;">
+                <video src="" controls></video>
+            </div>
+
+            <!-- ستون فرم (سمت راست) -->
+            <div class="filtering-card__form-column">
+                <form action="" method="post" class="filtering-card__form" id="filtering-form">
+                    <input
+                            type="text"
+                            name="search"
+                            placeholder="<?php esc_attr_e('جستجو...', 'accounting'); ?>"
+                            class="filtering-card__search-box"
+                            value="<?php echo esc_attr($search); ?>"
+                    />
+
+                    <div class="filtering-card__category">
+                        <?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
+                            <?php foreach ( $categories as $cat ) : ?>
+                                <label>
+                                    <input
+                                            type="checkbox"
+                                            name="categories[]"
+                                            value="<?php echo esc_attr( $cat->term_id ); ?>"
+                                            class="filtering-card__category-checkbox"
+                                            <?php checked( in_array( $cat->term_id, $selected_cats ) ); ?>
+                                    />
+                                    <?php echo esc_html( $cat->name ); ?>
+                                </label><br/>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <input type="submit" value="<?php esc_attr_e('فیلتر', 'accounting'); ?>" class="filtering-card__submit-btn" />
+                </form>
+            </div>
+
+            <!-- ستون نتایج (سمت چپ) -->
+            <div class="filtering-card__result-column">
+                <?php if ( !empty($search) || !empty($selected_cats) ) : ?>
+                    <div class="filtering-card__active-filters">
+                        <strong><?php esc_html_e('فیلترهای اعمال شده:', 'accounting'); ?></strong>
+
+                        <?php if ( !empty($search) ) : ?>
+                            <span class="filtering-card__active-filter">
+                    <?php echo sprintf( __('جستجو: %s', 'accounting'), esc_html($search) ); ?>
+                </span>
+                        <?php endif; ?>
+
+                        <?php if ( !empty($selected_cats) ) : ?>
+                            <?php foreach ( $selected_cats as $cat_id ) :
+                                $term = get_term( $cat_id );
+                                if ( !is_wp_error($term) && $term ) :
+                                    ?>
+                                    <span class="filtering-card__active-filter">
+                        <?php echo esc_html( $term->name ); ?>
+                    </span>
+                                <?php endif; endforeach; ?>
+                        <?php endif; ?>
+
+                        <!-- دکمه پاک کردن -->
+                        <a href="<?php echo esc_url( get_permalink() ); ?>" class="filtering-card__clear-filters">
+                            <?php esc_html_e('پاک کردن همه', 'accounting'); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+                <?php if ( $query->have_posts() ) : ?>
+                    <?php while ( $query->have_posts() ) : $query->the_post();
+                        // ACF fields — ممکنه URL یا آرایه یا attachment ID باشه
+                        $video_field = get_field('video'); // ممکنه url یا آرایه یا id
+                        $video_url = '';
+
+                        if ( is_array( $video_field ) && ! empty( $video_field['url'] ) ) {
+                            $video_url = $video_field['url'];
+                        } elseif ( is_numeric( $video_field ) ) {
+                            $video_url = wp_get_attachment_url( $video_field );
+                        } else {
+                            $video_url = $video_field; // فرض می‌کنیم رشته (url) هست
+                        }
+
+                        $cover_field = get_field('video-cover');
+                        $cover_url = '';
+
+                        if ( is_array( $cover_field ) && ! empty( $cover_field['url'] ) ) {
+                            $cover_url = $cover_field['url'];
+                        } elseif ( is_numeric( $cover_field ) ) {
+                            $cover_url = wp_get_attachment_url( $cover_field );
+                        } else {
+                            $cover_url = $cover_field;
+                        }
+                        ?>
+                        <article class="filtering-card__result" data-video="<?php echo esc_url( $video_url ); ?>">
+                            <div class="filtering-video__video-cover">
+                                <?php if ( $cover_url ) : ?>
+                                    <img src="<?php echo esc_url( $cover_url ); ?>" alt="<?php the_title_attribute(); ?>" class="filtering-video__video-image" />
+                                <?php endif; ?>
+                                <img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . '../assets/images/play-icon.png' ); ?>" alt="Play" class="filtering-video__video-play-icon" />
+                            </div>
+                            <h3 class="filtering-card__title"><?php the_title(); ?></h3>
+                        </article>
+                    <?php endwhile; wp_reset_postdata(); ?>
+                <?php else: ?>
+                    <p><?php esc_html_e('ویدیویی یافت نشد.', 'accounting'); ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <?php
+    }
+
+
 };
