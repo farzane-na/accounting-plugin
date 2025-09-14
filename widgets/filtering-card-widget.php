@@ -109,6 +109,7 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
             <!-- ستون فرم (سمت راست) -->
             <div class="filtering-card__form-column">
                 <form action="" method="post" class="filtering-card__form" id="filtering-form">
+                    <h3 class="filtering-card__form-title">فیلتر</h3>
                     <input
                             type="text"
                             name="search"
@@ -116,11 +117,11 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                             class="filtering-card__search-box"
                             value="<?php echo esc_attr($search); ?>"
                     />
-
+                    <h3 class="filtering-card__category-title">دسته بندی</h3>
                     <div class="filtering-card__category">
                         <?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
                             <?php foreach ( $categories as $cat ) : ?>
-                                <label>
+                                <label class="filtering-card__category-container">
                                     <input
                                             type="checkbox"
                                             name="categories[]"
@@ -128,8 +129,9 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                                             class="filtering-card__category-checkbox"
                                             <?php checked( in_array( $cat->term_id, $selected_cats ) ); ?>
                                     />
-                                    <?php echo esc_html( $cat->name ); ?>
-                                </label><br/>
+                                    <div class="filtering-card__checked"></div>
+                                    <span class="filtering-card__category-name"><?php echo esc_html( $cat->name ); ?></span>
+                                </label>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
