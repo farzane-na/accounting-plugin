@@ -1,3 +1,6 @@
+body{
+    background-color: #ccc;
+}
 .filtering-card h1,.filtering-card h2,.filtering-card h3,.filtering-card h4,.filtering-card h5,.filtering-card h6,.filtering-card p{
     margin: 0 ;
     padding: 0;
@@ -8,6 +11,7 @@
     justify-content: flex-start;
     align-items: start;
     gap: 24px;
+    font-family: 'iranyekan';
 }
 .filtering-card__modal-video{
 
@@ -125,12 +129,14 @@
 }
 .filtering-card__result-column{
     width: 77%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 24px;
 }
 .filtering-card__active-filters{
-
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .filtering-card__active-filter{
 
@@ -139,20 +145,45 @@
 
 }
 .filtering-card__clear-filters{
-
+    color: #fff;
+    padding: 5px 15px;
+    background-color: #FF6B00;
+    border-radius: 8px;
+}
+.filtering-card__clear-filters:hover{
+    color: #fff;
+}
+.filtering-card__results{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
 }
 .filtering-card__result{
-
+    background-color: #fff;
+    padding: 16px 18px 24px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: space-between;
 }
-.filtering-video__video-cover{
-
+.filtering-card__video-wrapper{
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
 }
-.filtering-video__video-image{
-
+.filtering-card__play-icon{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
-.filtering-video__video-play-icon{
-
+.filtering-card__video-image{
+    width: 100%;
+    object-fit: cover;
 }
 .filtering-card__title{
-
+    font-size: 16px;
+    font-weight: 700;
 }

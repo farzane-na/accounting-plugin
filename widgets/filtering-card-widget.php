@@ -144,24 +144,26 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
             <div class="filtering-card__result-column">
                 <?php if ( !empty($search) || !empty($selected_cats) ) : ?>
                     <div class="filtering-card__active-filters">
-                        <strong><?php esc_html_e('فیلترهای اعمال شده:', 'accounting'); ?></strong>
+                       <div>
+                           <strong><?php esc_html_e('فیلترهای اعمال شده:', 'accounting'); ?></strong>
 
-                        <?php if ( !empty($search) ) : ?>
-                            <span class="filtering-card__active-filter">
+                           <?php if ( !empty($search) ) : ?>
+                               <span class="filtering-card__active-filter">
                     <?php echo sprintf( __('جستجو: %s', 'accounting'), esc_html($search) ); ?>
                 </span>
-                        <?php endif; ?>
+                           <?php endif; ?>
 
-                        <?php if ( !empty($selected_cats) ) : ?>
-                            <?php foreach ( $selected_cats as $cat_id ) :
-                                $term = get_term( $cat_id );
-                                if ( !is_wp_error($term) && $term ) :
-                                    ?>
-                                    <span class="filtering-card__active-filter">
+                           <?php if ( !empty($selected_cats) ) : ?>
+                               <?php foreach ( $selected_cats as $cat_id ) :
+                                   $term = get_term( $cat_id );
+                                   if ( !is_wp_error($term) && $term ) :
+                                       ?>
+                                       <span class="filtering-card__active-filter">
                         <?php echo esc_html( $term->name ); ?>
                     </span>
-                                <?php endif; endforeach; ?>
-                        <?php endif; ?>
+                                   <?php endif; endforeach; ?>
+                           <?php endif; ?>
+                       </div>
 
                         <!-- دکمه پاک کردن -->
                         <a href="<?php echo esc_url( get_permalink() ); ?>" class="filtering-card__clear-filters">
@@ -169,10 +171,11 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                         </a>
                     </div>
                 <?php endif; ?>
+                <div class="filtering-card__results">
                 <?php if ( $query->have_posts() ) : ?>
                     <?php while ( $query->have_posts() ) : $query->the_post();
                         // ACF fields — ممکنه URL یا آرایه یا attachment ID باشه
-                        $video_field = get_field('video'); // ممکنه url یا آرایه یا id
+                        $video_field = get_field('video-file'); // ممکنه url یا آرایه یا id
                         $video_url = '';
 
                         if ( is_array( $video_field ) && ! empty( $video_field['url'] ) ) {
@@ -195,11 +198,21 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                         }
                         ?>
                         <article class="filtering-card__result" data-video="<?php echo esc_url( $video_url ); ?>">
-                            <div class="filtering-video__video-cover">
+                            <div class="filtering-card__video-wrapper">
                                 <?php if ( $cover_url ) : ?>
-                                    <img src="<?php echo esc_url( $cover_url ); ?>" alt="<?php the_title_attribute(); ?>" class="filtering-video__video-image" />
+                                    <div class="filtering-card__video-cover">
+                                        <img src="<?php echo esc_url( $cover_url ); ?>" alt="<?php the_title_attribute(); ?>" class="filtering-card__video-image" />
+                                        <div class="filtering-card__play-icon">
+                                            <svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="0.128906" width="48" height="48" rx="24" fill="white" fill-opacity="0.8"/>
+                                                <path d="M33.1289 22.2679C34.4622 23.0378 34.4622 24.9623 33.1289 25.7321L21.1289 32.6603C19.7956 33.4301 18.1289 32.4678 18.1289 30.9282L18.1289 17.0718C18.1289 15.5322 19.7956 14.5699 21.1289 15.3397L33.1289 22.2679Z" fill="#FF6B00"/>
+                                            </svg>
+                                        </div>
+                                    </div>
                                 <?php endif; ?>
-                                <img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . '../assets/images/play-icon.png' ); ?>" alt="Play" class="filtering-video__video-play-icon" />
+                                <video class="filtering-card__video" controls style="display:none;">
+                                    <source src="<?php echo $video_url ; ?>" type="video/mp4">
+                                </video>
                             </div>
                             <h3 class="filtering-card__title"><?php the_title(); ?></h3>
                         </article>
@@ -207,6 +220,7 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                 <?php else: ?>
                     <p><?php esc_html_e('ویدیویی یافت نشد.', 'accounting'); ?></p>
                 <?php endif; ?>
+                </div
             </div>
         </div>
 
