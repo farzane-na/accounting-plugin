@@ -200,27 +200,62 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                 <?php if ( $query->have_posts() ) : ?>
                     <?php while ( $query->have_posts() ) : $query->the_post();
                         // ACF fields — ممکنه URL یا آرایه یا attachment ID باشه
-                        $video_field = get_field('video-file'); // ممکنه url یا آرایه یا id
+                        // $video_field = get_field('video-file'); // ممکنه url یا آرایه یا id
+                        // $video_url = '';
+
+                        // if ( is_array( $video_field ) && ! empty( $video_field['url'] ) ) {
+                        //     $video_url = $video_field['url'];
+                        // } elseif ( is_numeric( $video_field ) ) {
+                        //     $video_url = wp_get_attachment_url( $video_field );
+                        // } else {
+                        //     $video_url = $video_field; // فرض می‌کنیم رشته (url) هست
+                        // }
+
+                        // $cover_field = get_field('video-cover');
+                        // $cover_url = '';
+
+                        // if ( is_array( $cover_field ) && ! empty( $cover_field['url'] ) ) {
+                        //     $cover_url = $cover_field['url'];
+                        // } elseif ( is_numeric( $cover_field ) ) {
+                        //     $cover_url = wp_get_attachment_url( $cover_field );
+                        // } else {
+                        //     $cover_url = $cover_field;
+                        // }
                         $video_url = '';
-
-                        if ( is_array( $video_field ) && ! empty( $video_field['url'] ) ) {
-                            $video_url = $video_field['url'];
-                        } elseif ( is_numeric( $video_field ) ) {
-                            $video_url = wp_get_attachment_url( $video_field );
-                        } else {
-                            $video_url = $video_field; // فرض می‌کنیم رشته (url) هست
-                        }
-
-                        $cover_field = get_field('video-cover');
                         $cover_url = '';
 
-                        if ( is_array( $cover_field ) && ! empty( $cover_field['url'] ) ) {
-                            $cover_url = $cover_field['url'];
-                        } elseif ( is_numeric( $cover_field ) ) {
-                            $cover_url = wp_get_attachment_url( $cover_field );
+                        if ( function_exists('get_field') ) {
+                            $video_field = get_field('video-file');
+                            $cover_field = get_field('video-cover');
+                        
+                            if ( is_array($video_field) && !empty($video_field['url']) ) $video_url = esc_url($video_field['url']);
+                            elseif ( is_numeric($video_field) ) $video_url = esc_url(wp_get_attachment_url($video_field));
+                            else $video_url = esc_url($video_field);
+                        
+                            if ( is_array($cover_field) && !empty($cover_field['url']) ) $cover_url = esc_url($cover_field['url']);
+                            elseif ( is_numeric($cover_field) ) $cover_url = esc_url(wp_get_attachment_url($cover_field));
+                            else $cover_url = esc_url($cover_field);
+                        
                         } else {
-                            $cover_url = $cover_field;
+                            $video_field = get_post_meta(get_the_ID(), 'video-file', true);
+                            $cover_field = get_post_meta(get_the_ID(), 'video-cover', true);
+
+                            $video_url = '';
+                            $cover_url = '';
+                            if (is_numeric($video_field)) {
+                                $video_url = wp_get_attachment_url($video_field);
+                            } else {
+                                $video_url = esc_url($video_field);
+                            }
+
+                            if (is_numeric($cover_field)) {
+                                $cover_url = wp_get_attachment_url($cover_field);
+                            } else {
+                                $cover_url = esc_url($cover_field);
+                            }
+                            
                         }
+
                         ?>
                         <article class="filtering-card__result" data-video="<?php echo esc_url( $video_url ); ?>">
                             <div class="filtering-card__video-wrapper">
