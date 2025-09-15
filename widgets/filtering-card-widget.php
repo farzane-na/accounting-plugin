@@ -71,17 +71,11 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
         $search = isset($_POST['search']) ? sanitize_text_field($_POST['search']) : '';
         $settings = $this->get_settings_for_display();
         $selected_cats = isset($_POST['categories']) ? array_map('intval', $_POST['categories']) : [];
-
-        // درست گرفتن post_type از تنظیمات (fix)
         $post_type = ! empty( $settings['select_post_type'] ) ? $settings['select_post_type'] : 'education-video';
-
-        // گرفتن دسته‌بندی‌ها (اگر taxonomy متفاوتی داری اینجا تغییر بده)
         $categories = get_terms([
             'taxonomy'   => 'video-category',
             'hide_empty' => true,
         ]);
-
-        // کوئری ویدیوها — وضع پیشنهادی: فقط منتشر شده‌ها
         $args = [
             'post_type'      => $post_type,
             'posts_per_page' => -1,
@@ -101,12 +95,6 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
         ?>
 
         <div class="filtering-card">
-            <!-- مودال ویدیو -->
-            <div class="filtering-card__modal-video" style="display:none;">
-                <video src="" controls></video>
-            </div>
-
-            <!-- ستون فرم (سمت راست) -->
             <div class="filtering-card__form-column">
                 <div class="filtering-card__open-filter-btn">
                     <span>
@@ -164,8 +152,6 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                     <input type="submit" value="<?php esc_attr_e('فیلتر', 'accounting'); ?>" class="filtering-card__submit-btn" />
                 </form>
             </div>
-
-            <!-- ستون نتایج (سمت چپ) -->
             <div class="filtering-card__result-column">
                 <?php if ( !empty($search) || !empty($selected_cats) ) : ?>
                     <div class="filtering-card__active-filters">
@@ -189,8 +175,6 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                                    <?php endif; endforeach; ?>
                            <?php endif; ?>
                        </div>
-
-                        <!-- دکمه پاک کردن -->
                         <a href="<?php echo esc_url( get_permalink() ); ?>" class="filtering-card__clear-filters">
                             <?php esc_html_e('پاک کردن همه', 'accounting'); ?>
                         </a>
@@ -199,28 +183,6 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                 <div class="filtering-card__results">
                 <?php if ( $query->have_posts() ) : ?>
                     <?php while ( $query->have_posts() ) : $query->the_post();
-                        // ACF fields — ممکنه URL یا آرایه یا attachment ID باشه
-                        // $video_field = get_field('video-file'); // ممکنه url یا آرایه یا id
-                        // $video_url = '';
-
-                        // if ( is_array( $video_field ) && ! empty( $video_field['url'] ) ) {
-                        //     $video_url = $video_field['url'];
-                        // } elseif ( is_numeric( $video_field ) ) {
-                        //     $video_url = wp_get_attachment_url( $video_field );
-                        // } else {
-                        //     $video_url = $video_field; // فرض می‌کنیم رشته (url) هست
-                        // }
-
-                        // $cover_field = get_field('video-cover');
-                        // $cover_url = '';
-
-                        // if ( is_array( $cover_field ) && ! empty( $cover_field['url'] ) ) {
-                        //     $cover_url = $cover_field['url'];
-                        // } elseif ( is_numeric( $cover_field ) ) {
-                        //     $cover_url = wp_get_attachment_url( $cover_field );
-                        // } else {
-                        //     $cover_url = $cover_field;
-                        // }
                         $video_url = '';
                         $cover_url = '';
 
@@ -257,7 +219,7 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                         }
 
                         ?>
-                        <article class="filtering-card__result" data-video="<?php echo esc_url( $video_url ); ?>">
+                        <article class="filtering-card__result">
                             <div class="filtering-card__video-wrapper">
                                 <?php if ( $cover_url ) : ?>
                                     <div class="filtering-card__video-cover">
@@ -280,7 +242,7 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
                 <?php else: ?>
                     <p><?php esc_html_e('ویدیویی یافت نشد.', 'accounting'); ?></p>
                 <?php endif; ?>
-                </div
+                </div>
             </div>
         </div>
 
