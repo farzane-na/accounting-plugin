@@ -2,5 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../Custom-restaurant-menu" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../bubble-contact" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../custom-elementor-widget" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../daily-status" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../last-user-login" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/../post-extra-meta-box" vcs="Git" />
   </component>
 </project>

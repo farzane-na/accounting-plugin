@@ -10,3 +10,15 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 });
+
+const closeFilteringFormBtn = document.querySelector(".filtering-card__close-filter-form");
+const openFilteringFormBtn = document.querySelector(".filtering-card__open-filter-btn");
+const filteringForm = document.querySelector(".filtering-card__form");
+
+openFilteringFormBtn.addEventListener("click", () => {
+  filteringForm.classList.add("active");
+});
+
+closeFilteringFormBtn.addEventListener("click", () => {
+  filteringForm.classList.remove("active");
+});

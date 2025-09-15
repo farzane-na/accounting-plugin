@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$/../../..">
+      <sourceFolder url="file://$MODULE_DIR$/.." isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../advanced-custom-fields/src" isTestSource="false" packagePrefix="ACF" />
+      <sourceFolder url="file://$MODULE_DIR$/../cost-calculator-builder" isTestSource="false" packagePrefix="CCB_Elementor_Widgets" />
+      <sourceFolder url="file://$MODULE_DIR$/../cost-calculator-builder/includes" isTestSource="false" packagePrefix="cBuilder" />
+      <sourceFolder url="file://$MODULE_DIR$/../cost-calculator-builder/includes/lib/admin-notifications-popup/classes" isTestSource="false" packagePrefix="ANP" />
+      <sourceFolder url="file://$MODULE_DIR$/../elementor-pro" isTestSource="false" packagePrefix="ElementorPro" />
+      <sourceFolder url="file://$MODULE_DIR$/../elementor/includes" isTestSource="false" packagePrefix="Elementor" />
+      <sourceFolder url="file://$MODULE_DIR$/../woocommerce/packages/action-scheduler/classes" isTestSource="false" packagePrefix="Action_Scheduler" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../wp-includes" isTestSource="false" packagePrefix="PHPMailer" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../wp-includes/SimplePie/src" isTestSource="false" packagePrefix="SimplePie" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

@@ -108,8 +108,33 @@ class Filtering_Card_Widget extends \Elementor\Widget_Base{
 
             <!-- ستون فرم (سمت راست) -->
             <div class="filtering-card__form-column">
+                <div class="filtering-card__open-filter-btn">
+                    <span>
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.75 3H10.5" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7.5 3H2.25" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.75 9H9" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6 9H2.25" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M15.75 15H12" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 15H2.25" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M10.5 1.5V4.5" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6 7.5V10.5" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 13.5V16.5" stroke="#2A2A2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span>فیلتر</span>
+                </div>
                 <form action="" method="post" class="filtering-card__form" id="filtering-form">
-                    <h3 class="filtering-card__form-title">فیلتر</h3>
+                    <div class='filtering-card__form-heading'>
+                        <h3 class="filtering-card__form-title">فیلتر</h3>
+                        <span class="filtering-card__close-filter-form">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="32" height="32" rx="16" fill="#F3F4F6"/>
+                                <path d="M21 11L11 21" stroke="black" stroke-width="1.5"                                stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M11 11L21 21" stroke="black" stroke-width="1.5"                                stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                    </div>
                     <input
                             type="text"
                             name="search"
